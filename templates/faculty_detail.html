@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ row.name }}{% endblock %}
+{% block content %}
+<article class="wrap section narrow">
+  <p><a href="{{ url_for('faculty') }}">&larr; All faculty</a></p>
+  <h1>{{ row.name }}</h1>
+  <p class="meta">{{ row.designation }}</p>
+  <dl class="details">
+    <div><dt>Qualification</dt><dd>{{ row.qualification }}</dd></div>
+    <div><dt>Specialization</dt><dd>{{ row.specialization }}</dd></div>
+    <div><dt>Email</dt><dd><a href="mailto:{{ row.email }}">{{ row.email }}</a></dd></div>
+    <div><dt>Phone</dt><dd><a href="tel:{{ row.phone }}">{{ row.phone }}</a></dd></div>
+  </dl>
+  <h2>Profile</h2>
+  <p class="body-text">{{ row.bio }}</p>
+</article>
+{% endblock %}

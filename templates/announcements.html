@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Announcements{% endblock %}
+{% block content %}
+<section class="wrap section">
+  <h1>Announcements</h1>
+  <form class="filters" method="get" action="{{ url_for('announcements') }}">
+    <label>Search
+      <input type="search" name="q" value="{{ q }}" maxlength="60" placeholder="e.g. examination">
+    </label>
+    <label>Category
+      <select name="category">
+        <option value="">All categories</option>
+        {% for c in categories %}
+          <option value="{{ c }}" {% if c == category %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button class="button" type="submit">Apply</button>
+    {% if q or category %}<a href="{{ url_for('announcements') }}">Clear</a>{% endif %}
+  </form>
+
+  <p class="meta">{{ rows | length }} announcement{{ '' if rows | length == 1 else 's' }} found</p>
+  {% if rows %}
+    <div class="stack">
+      {% for a in rows %}
+        <article class="card">
+          <p class="meta"><span class="tag">{{ a.category }}</span> {{ a.published_on }}</p>
+          <h2 class="h3"><a href="{{ url_for('announcement_detail', item_id=a.id) }}">{{ a.title }}</a></h2>
+          <p>{{ a.body | truncate(180) }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">No announcements match your search. Try a different word or clear the filters.</p>
+  {% endif %}
+</section>
+{% endblock %}

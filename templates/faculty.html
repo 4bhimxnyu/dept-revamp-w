@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Faculty{% endblock %}
+{% block content %}
+<section class="wrap section">
+  <h1>Faculty</h1>
+  <form class="filters" method="get" action="{{ url_for('faculty') }}">
+    <label>Search by name, designation or specialization
+      <input type="search" name="q" value="{{ q }}" maxlength="60" placeholder="e.g. machine learning">
+    </label>
+    <button class="button" type="submit">Search</button>
+    {% if q %}<a href="{{ url_for('faculty') }}">Clear</a>{% endif %}
+  </form>
+
+  {% if rows %}
+    <div class="grid">
+      {% for f in rows %}
+        <article class="card person">
+          <span class="avatar" aria-hidden="true">{{ f.name.split(' ')[-1][0] }}</span>
+          <h2 class="h3"><a href="{{ url_for('faculty_detail', item_id=f.id) }}">{{ f.name }}</a></h2>
+          <p class="meta">{{ f.designation }}</p>
+          <p>{{ f.specialization }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">No faculty profiles match your search.</p>
+  {% endif %}
+</section>
+{% endblock %}

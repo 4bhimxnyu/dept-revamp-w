@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Contact{% endblock %}
+{% block content %}
+<section class="wrap section two-col">
+  <div>
+    <h1>Contact</h1>
+    <dl class="details">
+      <div><dt>Address</dt><dd>{{ dept.address }}</dd></div>
+      <div><dt>Email</dt><dd><a href="mailto:{{ dept.email }}">{{ dept.email }}</a></dd></div>
+      <div><dt>Phone</dt><dd><a href="tel:{{ dept.phone | replace('-', '') }}">{{ dept.phone }}</a></dd></div>
+      <div><dt>Office hours</dt><dd>{{ dept.hours }}</dd></div>
+    </dl>
+    <p class="meta">Useful links:
+      <a href="{{ url_for('faculty') }}">faculty directory</a>,
+      <a href="{{ url_for('events') }}">events calendar</a>,
+      <a href="{{ url_for('announcements', category='Examination') }}">examination notices</a>.
+    </p>
+  </div>
+
+  <form method="post" action="{{ url_for('contact') }}" class="form" novalidate>
+    <h2>Send a message</h2>
+    <p class="meta">Messages are saved to the database for the department office. No email is sent (simulated delivery).</p>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    {% for name, label, kind, max in [('name', 'Your name', 'text', 80), ('email', 'Your email', 'email', 120), ('subject', 'Subject', 'text', 120)] %}
+      <label for="{{ name }}">{{ label }}</label>
+      <input id="{{ name }}" name="{{ name }}" type="{{ kind }}" maxlength="{{ max }}" value="{{ form.get(name, '') }}"
+             {% if errors.get(name) %}aria-invalid="true" aria-describedby="{{ name }}-error"{% endif %}>
+      {% if errors.get(name) %}<p class="field-error" id="{{ name }}-error">{{ errors[name] }}</p>{% endif %}
+    {% endfor %}
+
+    <label for="body">Message</label>
+    <textarea id="body" name="body" rows="5" maxlength="1000"
+              {% if errors.get('body') %}aria-invalid="true" aria-describedby="body-error"{% endif %}>{{ form.get('body', '') }}</textarea>
+    <p class="help">10 to 1000 characters.</p>
+    {% if errors.get('body') %}<p class="field-error" id="body-error">{{ errors['body'] }}</p>{% endif %}
+
+    <button class="button" type="submit">Send message</button>
+  </form>
+</section>
+{% endblock %}

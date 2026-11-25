@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+{% block content %}
+<section class="wrap section">
+  <h1>Events</h1>
+
+  <h2>Upcoming</h2>
+  {% if upcoming %}
+    <div class="stack">
+      {% for e in upcoming %}
+        <article class="card event">
+          <p class="event-date">{{ e.event_date }}<br><span>{{ e.event_time }}</span></p>
+          <div>
+            <h3>{{ e.title }}</h3>
+            <p class="meta">{{ e.venue }}</p>
+            <p>{{ e.description }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">No upcoming events are scheduled. Please check again later.</p>
+  {% endif %}
+
+  <h2>Past events</h2>
+  {% if past %}
+    <div class="stack">
+      {% for e in past %}
+        <article class="card event past">
+          <p class="event-date">{{ e.event_date }}<br><span>{{ e.event_time }}</span></p>
+          <div>
+            <h3>{{ e.title }}</h3>
+            <p class="meta">{{ e.venue }}</p>
+            <p>{{ e.description }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">There are no past events on record.</p>
+  {% endif %}
+</section>
+{% endblock %}

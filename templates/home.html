@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">{{ dept.tagline }}</p>
+    <h1>{{ dept.name }}</h1>
+    <p class="lead">Notices, faculty, events and contact details in one place, kept current by the department office.</p>
+    <div class="actions">
+      <a class="button" href="{{ url_for('announcements') }}">Read announcements</a>
+      <a class="button button-ghost" href="{{ url_for('events') }}">See upcoming events</a>
+    </div>
+    <dl class="stats">
+      <div><dt>Faculty members</dt><dd>{{ counts.faculty }}</dd></div>
+      <div><dt>Announcements</dt><dd>{{ counts.announcements }}</dd></div>
+      <div><dt>Upcoming events</dt><dd>{{ counts.upcoming }}</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="wrap section">
+  <div class="section-head">
+    <h2>Latest announcements</h2>
+    <a href="{{ url_for('announcements') }}">View all</a>
+  </div>
+  {% if latest %}
+    <div class="grid">
+      {% for a in latest %}
+        <article class="card">
+          <p class="meta"><span class="tag">{{ a.category }}</span> {{ a.published_on }}</p>
+          <h3><a href="{{ url_for('announcement_detail', item_id=a.id) }}">{{ a.title }}</a></h3>
+          <p>{{ a.body | truncate(120) }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">No announcements have been published yet.</p>
+  {% endif %}
+</section>
+
+<section class="wrap section">
+  <div class="section-head">
+    <h2>Upcoming events</h2>
+    <a href="{{ url_for('events') }}">View all</a>
+  </div>
+  {% if upcoming %}
+    <div class="grid">
+      {% for e in upcoming %}
+        <article class="card">
+          <p class="meta">{{ e.event_date }} at {{ e.event_time }}</p>
+          <h3>{{ e.title }}</h3>
+          <p class="meta">{{ e.venue }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">No upcoming events are scheduled.</p>
+  {% endif %}
+</section>
+{% endblock %}

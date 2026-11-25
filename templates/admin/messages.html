@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Contact messages{% endblock %}
+{% block content %}
+<section class="wrap section">
+  <p><a href="{{ url_for('admin_dashboard') }}">&larr; Back to dashboard</a></p>
+  <h1>Contact messages</h1>
+  {% if rows %}
+    <div class="stack">
+      {% for m in rows %}
+        <article class="card">
+          <p class="meta">{{ m.created_at }} · {{ m.name }} · <a href="mailto:{{ m.email }}">{{ m.email }}</a></p>
+          <h2 class="h3">{{ m.subject }}</h2>
+          <p class="body-text">{{ m.body }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">No messages have been received yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

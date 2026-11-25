@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if editing else 'Add' }} {{ cfg.label | lower }}{% endblock %}
+{% block content %}
+<section class="wrap section narrow">
+  <p><a href="{{ url_for('admin_dashboard') }}#{{ kind }}">&larr; Back to dashboard</a></p>
+  <h1>{{ 'Edit' if editing else 'Add' }} {{ cfg.label | lower }}</h1>
+
+  <!-- novalidate: we rely on the server-side checks so every rule is shown the same way -->
+  <form method="post" class="form" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    {% for f in cfg.fields %}
+      {% set value = form.get(f.name, '') %}
+      {% set bad = errors.get(f.name) %}
+      <label for="{{ f.name }}">{{ f.label }}</label>
+
+      {% if f.type == 'textarea' %}
+        <textarea id="{{ f.name }}" name="{{ f.name }}" rows="6" maxlength="{{ f.max }}"
+                  {% if bad %}aria-invalid="true" aria-describedby="{{ f.name }}-error"{% endif %}>{{ value }}</textarea>
+      {% elif f.type == 'select' %}
+        <select id="{{ f.name }}" name="{{ f.name }}"
+                {% if bad %}aria-invalid="true" aria-describedby="{{ f.name }}-error"{% endif %}>
+          <option value="">Choose...</option>
+          {% for option in f.options %}
+            <option value="{{ option }}" {% if option == value %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      {% else %}
+        <input id="{{ f.name }}" name="{{ f.name }}" type="{{ f.type }}" value="{{ value }}"
+               {% if f.max %}maxlength="{{ f.max }}"{% endif %}
+               {% if bad %}aria-invalid="true" aria-describedby="{{ f.name }}-error"{% endif %}>
+      {% endif %}
+
+      {% if f.help %}<p class="help">{{ f.help }}</p>{% endif %}
+      {% if bad %}<p class="field-error" id="{{ f.name }}-error">{{ bad }}</p>{% endif %}
+    {% endfor %}
+
+    <div class="actions">
+      <button class="button" type="submit">{{ 'Save changes' if editing else 'Create' }}</button>
+      <a href="{{ url_for('admin_dashboard') }}#{{ kind }}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ row.title }}{% endblock %}
+{% block content %}
+<article class="wrap section narrow">
+  <p><a href="{{ url_for('announcements') }}">&larr; All announcements</a></p>
+  <p class="meta"><span class="tag">{{ row.category }}</span> Published {{ row.published_on }}</p>
+  <h1>{{ row.title }}</h1>
+  <p class="body-text">{{ row.body }}</p>
+  <p class="meta">Last updated {{ row.updated_at }}</p>
+</article>
+{% endblock %}

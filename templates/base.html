@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Home{% endblock %} | {{ dept.short }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="{{ url_for('home') }}">
+        <span class="brand-mark" aria-hidden="true">CSE</span>
+        <span class="brand-text">
+          <strong>{{ dept.name }}</strong>
+          <small>{{ dept.tagline }}</small>
+        </span>
+      </a>
+
+      <!-- Mobile menu: a hidden checkbox toggled by the label, no JavaScript needed -->
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Open menu">
+      <label for="nav-toggle" class="nav-button" aria-hidden="true"><span></span><span></span><span></span></label>
+
+      <nav class="nav" aria-label="Main">
+        {% set page = request.endpoint or '' %}
+        <a href="{{ url_for('home') }}" {% if page == 'home' %}aria-current="page"{% endif %}>Home</a>
+        <a href="{{ url_for('announcements') }}" {% if page.startswith('announcement') %}aria-current="page"{% endif %}>Announcements</a>
+        <a href="{{ url_for('faculty') }}" {% if page.startswith('faculty') %}aria-current="page"{% endif %}>Faculty</a>
+        <a href="{{ url_for('events') }}" {% if page == 'events' %}aria-current="page"{% endif %}>Events</a>
+        <a href="{{ url_for('contact') }}" {% if page == 'contact' %}aria-current="page"{% endif %}>Contact</a>
+        {% if session.get('admin') %}
+          <a class="nav-admin" href="{{ url_for('admin_dashboard') }}" {% if page.startswith('admin') %}aria-current="page"{% endif %}>Admin</a>
+          <form method="post" action="{{ url_for('admin_logout') }}" class="inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="link-button" type="submit">Log out</button>
+          </form>
+        {% else %}
+          <a class="nav-admin" href="{{ url_for('admin_login') }}" {% if page == 'admin_login' %}aria-current="page"{% endif %}>Admin login</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="wrap flashes" role="status">
+          {% for category, message in messages %}
+            <p class="flash flash-{{ category }}">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <strong>{{ dept.name }}</strong>
+        <p>{{ dept.address }}</p>
+      </div>
+      <div>
+        <strong>Quick links</strong>
+        <p>
+          <a href="{{ url_for('announcements') }}">Announcements</a> ·
+          <a href="{{ url_for('faculty') }}">Faculty</a> ·
+          <a href="{{ url_for('events') }}">Events</a> ·
+          <a href="{{ url_for('contact') }}">Contact</a>
+        </p>
+      </div>
+      <div>
+        <strong>Reach us</strong>
+        <p><a href="mailto:{{ dept.email }}">{{ dept.email }}</a><br>
+           <a href="tel:{{ dept.phone | replace('-', '') }}">{{ dept.phone }}</a></p>
+      </div>
+    </div>
+    <p class="wrap notice">Academic prototype. All names, emails, phone numbers and the address are
+      fictitious sample data. The contact form saves messages to the database; no email is sent.</p>
+  </footer>
+</body>
+</html>
