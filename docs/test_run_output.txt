@@ -1,0 +1,24 @@
+tests/test_app.py::test_tc01_public_pages_and_navigation_work PASSED
+tests/test_app.py::test_tc02_admin_creates_announcement_and_visitor_sees_it PASSED
+tests/test_app.py::test_tc03_admin_updates_event_and_visitor_sees_change PASSED
+tests/test_app.py::test_tc04_search_and_filter PASSED
+tests/test_app.py::test_tc05_contact_message_is_saved PASSED
+tests/test_app.py::test_tc06_empty_fields_are_rejected PASSED
+tests/test_app.py::test_tc07_duplicate_records_are_rejected PASSED
+tests/test_app.py::test_tc08_admin_area_requires_login PASSED
+tests/test_app.py::test_tc09_wrong_login_is_rejected PASSED
+tests/test_app.py::test_tc10_invalid_formats_are_rejected PASSED
+tests/test_app.py::test_tc11_title_length_boundaries PASSED
+tests/test_app.py::test_tc12_event_date_boundaries PASSED
+tests/test_app.py::test_tc13_missing_records_show_404_page PASSED
+tests/test_app.py::test_tc14_form_without_csrf_token_is_refused PASSED
+tests/test_app.py::test_tc15_html_in_input_is_escaped PASSED
+tests/test_app.py::test_tc16_delete_and_empty_state PASSED
+tests/test_app.py::test_tc17_mobile_layout_is_supported PASSED
+tests/test_app.py::test_tc18_old_event_can_be_edited_without_moving_its_date PASSED
+tests/test_app.py::test_tc19_wildcard_characters_in_search_are_literal PASSED
+tests/test_validators.py::test_valid_announcement_has_no_errors PASSED
+tests/test_validators.py::test_body_length_boundaries PASSED
+tests/test_validators.py::test_event_date_rules PASSED
+tests/test_validators.py::test_phone_and_email_formats PASSED
+============================== 23 passed in 2.84s ==============================
