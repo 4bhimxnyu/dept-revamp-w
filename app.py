@@ -413,9 +413,9 @@ def create_app(db_path=None):
     return app
 
 
-if ON_VERCEL:
-    # Vercel imports this file and serves the object named `app`.
-    app = create_app()
+# Vercel imports this file and serves the top-level object named `app`.
+# Locally it stays empty so that importing this file never touches the database.
+app = create_app() if ON_VERCEL else None
 
 if __name__ == "__main__":
     db_file = DEFAULT_DB
