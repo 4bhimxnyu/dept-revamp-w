@@ -4,12 +4,14 @@ ALL names, emails and phone numbers below are FICTITIOUS and exist only for
 the demonstration. Dates are written relative to today so that the demo always
 shows upcoming events, whenever it is run.
 """
+import os
 from datetime import date, datetime, timedelta
 
 from werkzeug.security import generate_password_hash
 
-# Demo login. Change the password before putting this on a public host.
-DEMO_ADMIN = ("admin", "Admin@123")
+# Demo login. On a public host, set ADMIN_PASSWORD in the environment to replace
+# the demo password.
+DEMO_ADMIN = ("admin", os.environ.get("ADMIN_PASSWORD") or "Admin@123")
 
 
 def _day(offset):

@@ -23,6 +23,13 @@ Open http://127.0.0.1:5000
 The database file `department.db` is created automatically with sample data on first run.
 To wipe it and start again from clean sample data (do this before the jury): `python app.py --reset`
 
+## Hosted demo (Vercel)
+
+The site also runs on Vercel straight from `app.py`. Two things differ from a local run:
+
+- **Content resets.** Vercel cannot keep a SQLite file, so the hosted copy stores its database in temporary storage and goes back to the sample data whenever Vercel starts a new instance. Use the local run for the jury demo of "admin edits, visitor sees it".
+- **Secrets come from environment variables.** `SECRET_KEY` signs the login cookie and must be set in the Vercel project. `ADMIN_PASSWORD` is optional and replaces the demo password.
+
 ## Run the tests
 
 ```bash

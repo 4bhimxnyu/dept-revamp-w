@@ -23,6 +23,13 @@ import validators as v
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# Vercel sets VERCEL=1. Its project folder is read-only and only /tmp can be
+# written, so the hosted demo keeps its database there. /tmp is temporary: the
+# hosted site goes back to the sample data whenever Vercel starts a new instance.
+ON_VERCEL = bool(os.environ.get("VERCEL"))
+DEFAULT_DB = os.environ.get("DATABASE_PATH") or (
+    "/tmp/department.db" if ON_VERCEL else os.path.join(BASE_DIR, "department.db"))
+
 # Fixed details of the department shown on every page (sample values).
 DEPARTMENT = {
     "name": "Department of Computer Science & Engineering",
@@ -80,9 +87,12 @@ CONTENT = {
 
 def create_app(db_path=None):
     app = Flask(__name__)
-    app.config["DATABASE"] = db_path or os.path.join(BASE_DIR, "department.db")
+    app.config["DATABASE"] = db_path or DEFAULT_DB
     # The secret key signs the login cookie. Set SECRET_KEY in the environment on a real host.
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-only-change-me")
+    if ON_VERCEL:  # the hosted site is always HTTPS, so never send the login cookie over HTTP
+        app.config["SESSION_COOKIE_SECURE"] = True
+        app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
     app.config["MAX_CONTENT_LENGTH"] = 64 * 1024  # reject request bodies above 64 KB
 
     # ---------- database helpers ----------
@@ -403,8 +413,12 @@ def create_app(db_path=None):
     return app
 
 
+if ON_VERCEL:
+    # Vercel imports this file and serves the object named `app`.
+    app = create_app()
+
 if __name__ == "__main__":
-    db_file = os.path.join(BASE_DIR, "department.db")
+    db_file = DEFAULT_DB
     if "--reset" in sys.argv and os.path.exists(db_file):
         os.remove(db_file)
         print("Database reset. Sample data reloaded.")
